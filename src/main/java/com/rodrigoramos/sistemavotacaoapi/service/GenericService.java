@@ -1,7 +1,6 @@
 package com.rodrigoramos.sistemavotacaoapi.service;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GenericService<E, M> {
 
@@ -11,7 +10,7 @@ public interface GenericService<E, M> {
 
     void deleteById(M id);
 
-    Optional<E> findById(M id);
+    E findById(M id);
 
     List<E> findAll();
 

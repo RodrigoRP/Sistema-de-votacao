@@ -6,9 +6,11 @@ import com.rodrigoramos.sistemavotacaoapi.dto.CustomerDTO;
 import com.rodrigoramos.sistemavotacaoapi.entity.Customer;
 import com.rodrigoramos.sistemavotacaoapi.service.CustomerService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,24 +22,29 @@ public class CustomerControllerImpl implements CustomerController {
     private final CustomerConverter customerConverter;
 
     @Override
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CustomerDTO save(@RequestBody CustomerDTO customerDTO) {
+    @PostMapping("/")
+    public ResponseEntity<Customer> save(@RequestBody CustomerDTO customerDTO) {
         Customer customer = customerConverter.asEntity(customerDTO);
-        return customerConverter.asDTO(customerService.save(customer));
+        customerService.save(customer);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(customer.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(customer);
     }
 
     @Override
     @GetMapping("/{id}")
-    public CustomerDTO findById(@PathVariable("id") Long id) {
-        Customer customer = customerService.findById(id).orElse(null);
-        return customerConverter.asDTO(customer);
+    public ResponseEntity<Customer> findById(@PathVariable("id") Long id) {
+        Customer customer = customerService.findById(id);
+        return ResponseEntity.ok().body(customer);
     }
 
     @Override
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         customerService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
