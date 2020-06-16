@@ -1,0 +1,13 @@
+package com.rodrigoramos.sistemavotacaoapi;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class SistemaVotacaoApiApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
